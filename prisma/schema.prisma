@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  color String @default("")
+  items Item[]
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    Category @relation(fields: [categoryId], references: [id])
+  timesBought Int      @default(0)
+  categoryId  Int
+  carts       Cart[]
+}
+
+model Cart {
+  id         Int       @id @default(autoincrement())
+  cartId     Int
+  item       Item      @relation(fields: [itemId], references: [id])
+  amount     Int
+  isPickedUp Boolean   @default(false)
+  isClosed   Boolean   @default(false)
+  updatedAt  DateTime  @default(now())
+  closedAt   DateTime?
+  itemId     Int
+}
