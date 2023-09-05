@@ -1,6 +1,6 @@
-import ItemCard from "./item-card";
-import CheckIcon from "@/icons/check.icon";
-import { CartItemWithCategory } from "@/types/item";
+import ItemCard from './item-card';
+import CheckIcon from '@/icons/check.icon';
+import { CartItemWithCategory } from '@/types/item';
 
 type Props = {
   item: CartItemWithCategory;
@@ -12,7 +12,7 @@ const ItemCardSelected = ({ item, onToggle }: Props) => (
     item={item.item}
     amount={item.amount}
     className={`cursor-pointer transition-all ${
-      item.isPickedUp ? "opacity-50" : undefined
+      item.isPickedUp ? 'opacity-50' : undefined
     }`}
     onClick={onToggle}
     renderContent={() => item.isPickedUp && <CheckIcon />}

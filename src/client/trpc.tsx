@@ -1,22 +1,22 @@
 'use client';
 import { httpBatchLink, loggerLink } from '@trpc/client';
-import { createTRPCReact } from "@trpc/react-query";
-import type { AppRouter } from "../server/routers/_app";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createTRPCReact } from '@trpc/react-query';
+import type { AppRouter } from '../server/routers/_app';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import superjson from 'superjson';
 
 function getBaseUrl() {
-  if (typeof window !== 'undefined')
-    // browser should use relative path
+  if (typeof window !== 'undefined') {
     return '';
-  if (process.env.VERCEL_URL)
-    // reference for vercel.com
+  }
+  if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
-  if (process.env.RENDER_INTERNAL_HOSTNAME)
-    // reference for render.com
+  }
+  if (process.env.RENDER_INTERNAL_HOSTNAME) {
     return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`;
-  // assume localhost
+  }
+
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
 
@@ -44,7 +44,7 @@ export function ClientProvider(props: { children: React.ReactNode }) {
         }),
       ],
       transformer: superjson,
-    }),
+    })
   );
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>

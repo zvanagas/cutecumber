@@ -1,7 +1,6 @@
-import { publicProcedure, router } from "../trpc";
-import { z } from "zod";
-import itemsRoutes from "./items";
-import cartRoutes from "./cart";
+import { publicProcedure, router } from '../trpc';
+import itemsRoutes from './items';
+import cartRoutes from './cart';
 
 export const appRouter = router({
   ...itemsRoutes,

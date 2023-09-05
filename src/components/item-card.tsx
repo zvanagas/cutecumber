@@ -1,5 +1,5 @@
-import { ItemWithCategory } from "@/types/item";
-import { ReactNode } from "react";
+import { ItemWithCategory } from '@/types/item';
+import { ReactNode } from 'react';
 
 type Props = {
   item: ItemWithCategory;
@@ -20,10 +20,10 @@ const ItemCard = ({
 }: Props) => {
   const getClassNames = () => {
     let baseClasses =
-      "shadow-sm p-2 flex justify-between rounded border border-slate-300 relative";
+      'shadow-sm p-2 flex justify-between rounded border border-slate-300 relative';
 
     if (isDisabled) {
-      baseClasses += " cursor-not-allowed";
+      baseClasses += ' cursor-not-allowed';
     }
 
     return className ? `${baseClasses} ${className}` : baseClasses;

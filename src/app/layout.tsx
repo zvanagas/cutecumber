@@ -1,5 +1,5 @@
-import "@/styles/globals.css";
-import { ClientProvider } from "@/client/trpc";
+import '@/styles/globals.css';
+import { ClientProvider } from '@/client/trpc';
 
 export default function RootLayout({
   children,

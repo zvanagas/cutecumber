@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export const createTRPCContext = () => ({ prisma });
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: SuperJSON
+  transformer: SuperJSON,
 });
 
 export const router = t.router;

@@ -1,5 +1,5 @@
-import { ItemWithCategory } from "@/types/item";
-import { useState } from "react";
+import { ItemWithCategory } from '@/types/item';
+import { useState } from 'react';
 
 type Props = {
   item: ItemWithCategory;

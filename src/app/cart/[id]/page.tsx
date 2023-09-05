@@ -1,8 +1,8 @@
-"use client";
-import { trpc } from "@/client/trpc";
-import ItemCardWithAmount from "@/components/item-card-with-amount";
-import Items from "@/components/items";
-import Link from "next/link";
+'use client';
+import { trpc } from '@/client/trpc';
+import ItemCardWithAmount from '@/components/item-card-with-amount';
+import Items from '@/components/items';
+import Link from 'next/link';
 
 type Props = {
   params: {

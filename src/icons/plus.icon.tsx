@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import { SVGProps } from 'react';
 
 const PlusIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => (
   <svg

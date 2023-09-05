@@ -1,12 +1,12 @@
-import { z } from "zod";
-import { publicProcedure } from "../trpc";
+import { z } from 'zod';
+import { publicProcedure } from '../trpc';
 
 const itemsRoutes = {
   items: publicProcedure
     .input(z.object({ q: z.string().nullish() }).nullish())
     .query(async ({ ctx, input }) =>
       ctx.prisma.item.findMany({
-        where: { name: { contains: input?.q ?? "", mode: "insensitive" } },
+        where: { name: { contains: input?.q ?? '', mode: 'insensitive' } },
         include: {
           category: true,
         },

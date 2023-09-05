@@ -1,7 +1,7 @@
-"use client";
-import { trpc } from "@/client/trpc";
-import ItemCardSelected from "@/components/item-card-selected";
-import Link from "next/link";
+'use client';
+import { trpc } from '@/client/trpc';
+import ItemCardSelected from '@/components/item-card-selected';
+import Link from 'next/link';
 
 export default function ActiveCart() {
   const { data } = trpc.latestCart.useQuery();

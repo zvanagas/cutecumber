@@ -1,11 +1,11 @@
-"use client";
-import { trpc } from "@/client/trpc";
-import { useState } from "react";
-import useDebounce from "@/hooks/use-debounce";
-import ItemCardWithAmount from "@/components/item-card-with-amount";
-import ItemCard from "@/components/item-card";
-import CloseIcon from "@/icons/close.icon";
-import { ItemWithCategory } from "@/types/item";
+'use client';
+import { trpc } from '@/client/trpc';
+import { useState } from 'react';
+import useDebounce from '@/hooks/use-debounce';
+import ItemCardWithAmount from '@/components/item-card-with-amount';
+import ItemCard from '@/components/item-card';
+import CloseIcon from '@/icons/close.icon';
+import { ItemWithCategory } from '@/types/item';
 
 interface CartItem {
   item: ItemWithCategory;
@@ -18,7 +18,7 @@ type Props = {
 
 const Items = ({ itemsInCart }: Props) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>('');
   const [categoryId, setCategoryId] = useState<number>(1);
   const debouncedValue = useDebounce(value);
   const { data, isFetched } = trpc.items.useQuery(
@@ -31,7 +31,7 @@ const Items = ({ itemsInCart }: Props) => {
 
   const addToCart = (item: ItemWithCategory, amount: number) => {
     setCart([...cart, { item, amount }]);
-    setValue("");
+    setValue('');
   };
 
   const saveCart = () => {
@@ -52,10 +52,12 @@ const Items = ({ itemsInCart }: Props) => {
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
-        <CloseIcon
-          className="absolute top-[5px] right-1 w-6 text-black cursor-pointer"
-          onClick={() => setValue("")}
-        />
+        {value && (
+          <CloseIcon
+            className="absolute top-[5px] right-1 w-6 text-black cursor-pointer"
+            onClick={() => setValue('')}
+          />
+        )}
       </div>
       {data?.map((item) => (
         <ItemCardWithAmount

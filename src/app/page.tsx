@@ -1,8 +1,8 @@
-"use client";
-import { trpc } from "@/client/trpc";
-import BasketIcon from "@/icons/basket.icon";
-import SaladIcon from "@/icons/salad.icon";
-import { useRouter } from "next/navigation";
+'use client';
+import { trpc } from '@/client/trpc';
+import BasketIcon from '@/icons/basket.icon';
+import SaladIcon from '@/icons/salad.icon';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();

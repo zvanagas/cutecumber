@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { publicProcedure } from "../trpc";
+import { z } from 'zod';
+import { publicProcedure } from '../trpc';
 
 const cartRoutes = {
   cart: publicProcedure
@@ -7,7 +7,7 @@ const cartRoutes = {
     .query(async ({ ctx, input }) =>
       ctx.prisma.cart.findMany({
         where: { cartId: input.cartId, isClosed: false },
-        orderBy: [{ id: "asc" }, { cartId: "desc" }],
+        orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
         include: {
           item: {
             include: {
@@ -20,7 +20,7 @@ const cartRoutes = {
   latestCart: publicProcedure.query(async ({ ctx }) =>
     ctx.prisma.cart.findMany({
       where: { isClosed: false },
-      orderBy: [{ id: "asc" }, { cartId: "desc" }],
+      orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
       include: {
         item: {
           include: {
@@ -34,7 +34,7 @@ const cartRoutes = {
     ctx.prisma.cart.findFirst({
       select: { cartId: true },
       where: { isClosed: false },
-      orderBy: [{ id: "asc" }, { cartId: "desc" }],
+      orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
     })
   ),
   removeFromCart: publicProcedure
@@ -54,11 +54,11 @@ const cartRoutes = {
     .mutation(async ({ ctx: { prisma }, input }) => {
       const latestOpenCart = await prisma.cart.findFirst({
         where: { isClosed: false },
-        orderBy: { cartId: "desc" },
+        orderBy: { cartId: 'desc' },
       });
       const latestClosedCart = await prisma.cart.findFirst({
         where: { isClosed: true },
-        orderBy: { cartId: "desc" },
+        orderBy: { cartId: 'desc' },
       });
 
       const cartId =

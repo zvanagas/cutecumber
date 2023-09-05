@@ -1,7 +1,7 @@
-import ItemCard from "./item-card";
-import { useEffect, useState } from "react";
-import CloseIcon from "@/icons/close.icon";
-import { ItemWithCategory } from "@/types/item";
+import ItemCard from './item-card';
+import { useEffect, useState } from 'react';
+import CloseIcon from '@/icons/close.icon';
+import { ItemWithCategory } from '@/types/item';
 
 type Props = {
   item: ItemWithCategory;
@@ -53,7 +53,7 @@ const ItemCardWithAmount = ({
               )}
               <span
                 className={`px-2 border-y border-slate-300 ${
-                  currAmount < 2 && "border-l rounded-l-md"
+                  currAmount < 2 && 'border-l rounded-l-md'
                 }`}
               >
                 {currAmount}
