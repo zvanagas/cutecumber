@@ -5,15 +5,18 @@ type Props = {
   link: string;
   label: string;
   Icon: ElementType;
+  isDisabled?: boolean;
 };
 
-const Card = ({ link, label, Icon }: Props) => {
+const Card = ({ link, label, Icon, isDisabled }: Props) => {
   const router = useRouter();
 
   return (
     <div
-      className="flex items-center justify-between w-full gap-2 p-4 cursor-pointer bg-white rounded text-black shadow-md"
-      onClick={() => router.push(link)}
+      className={`flex items-center justify-between w-full gap-2 p-4  bg-white rounded text-black shadow-md ${
+        isDisabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'
+      }`}
+      onClick={() => !isDisabled && router.push(link)}
     >
       <span>{label}</span>
       <Icon className="w-14 h-14" />

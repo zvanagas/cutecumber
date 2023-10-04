@@ -2,20 +2,12 @@
 import { trpc } from '@/client/trpc';
 import { useState } from 'react';
 import useDebounce from '@/hooks/use-debounce';
-import ItemCardWithAmount from '@/components/item-card-with-amount';
-import ItemCard from '@/components/item-card';
+import ItemCardWithActions from '@/components/item-card-with-actions';
 import CloseIcon from '@/icons/close.icon';
 import { ItemWithCategory } from '@/types/item';
-import Button from './button';
-
-interface CartItem {
-  item: ItemWithCategory;
-  amount: number;
-}
-
-interface SaveParams {
-  items: { itemId: number; amount: number }[];
-}
+import Button from '../button';
+import { startingSearchLimit } from '@/constants/search-limit';
+import { CartItem, SaveParams } from './interfaces/items';
 
 type Props = {
   onSave: (items: SaveParams) => void;
@@ -29,7 +21,7 @@ const Items = ({ itemsInCart, onSave }: Props) => {
   const debouncedValue = useDebounce(value);
   const { data, isFetched } = trpc.items.useQuery(
     { q: debouncedValue },
-    { enabled: debouncedValue.length > 2 }
+    { enabled: debouncedValue.length >= startingSearchLimit }
   );
   const { data: categories } = trpc.categories.useQuery();
   const { mutate: createItem } = trpc.createItem.useMutation();
@@ -37,6 +29,10 @@ const Items = ({ itemsInCart, onSave }: Props) => {
   const addToBasket = (item: ItemWithCategory, amount: number) => {
     setItems([...items, { item, amount }]);
     setValue('');
+  };
+
+  const removeFromBasket = (itemId: number) => {
+    setItems((items) => items.filter((item) => item.item.id !== itemId));
   };
 
   const save = () => {
@@ -66,7 +62,7 @@ const Items = ({ itemsInCart, onSave }: Props) => {
         )}
       </div>
       {data?.map((item) => (
-        <ItemCardWithAmount
+        <ItemCardWithActions
           key={item.name}
           item={item}
           isDisabled={itemsInCart?.some((it) => it.item.id === item.id)}
@@ -100,10 +96,11 @@ const Items = ({ itemsInCart, onSave }: Props) => {
         <div className="flex flex-col gap-2 justify-center items-center mt-10 w-full">
           <span>Added items</span>
           {items.map((item) => (
-            <ItemCard
+            <ItemCardWithActions
               key={item.item.id}
               item={item.item}
               amount={item.amount}
+              onDelete={() => removeFromBasket(item.item.id)}
             />
           ))}
           <Button onClick={save}>Save</Button>

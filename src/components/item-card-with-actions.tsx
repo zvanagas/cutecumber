@@ -1,7 +1,8 @@
 import ItemCard from './item-card';
 import { useEffect, useState } from 'react';
-import CloseIcon from '@/icons/close.icon';
 import { ItemWithCategory } from '@/types/item';
+import CloseButton from './close-button';
+import Button from './button';
 
 type Props = {
   item: ItemWithCategory;
@@ -11,7 +12,7 @@ type Props = {
   onDelete?: () => void;
 };
 
-const ItemCardWithAmount = ({
+const ItemCardWithActions = ({
   item,
   amount,
   isDisabled,
@@ -28,30 +29,26 @@ const ItemCardWithAmount = ({
 
   const renderContent = () => (
     <div className="flex flex-col justify-between items-end gap-6">
-      {onDelete && (
-        <button onClick={onDelete}>
-          <CloseIcon />
-        </button>
-      )}
+      {onDelete && <CloseButton onClick={onDelete} />}
       {onUpdate && (
         <>
           <div className="flex text-xl gap-2">
             {amount !== currAmount && (
-              <button
-                className="border-slate-300 border rounded-md px-2"
+              <Button
+                className="rounded-md"
                 onClick={() => onUpdate(currAmount)}
               >
                 U
-              </button>
+              </Button>
             )}
             <div className="flex">
               {currAmount > 1 && (
-                <button
-                  className="border-slate-300 border rounded-l-md px-2"
+                <Button
+                  className="rounded-l-md"
                   onClick={() => setCurrAmount(currAmount - 1)}
                 >
                   -
-                </button>
+                </Button>
               )}
               <span
                 className={`px-2 border-y border-slate-300 ${
@@ -60,12 +57,12 @@ const ItemCardWithAmount = ({
               >
                 {currAmount}
               </span>
-              <button
-                className="border border-slate-300 px-2 rounded-r-md"
+              <Button
+                className="px-2 rounded-r-md"
                 onClick={() => setCurrAmount(currAmount + 1)}
               >
                 +
-              </button>
+              </Button>
             </div>
           </div>
         </>
@@ -85,4 +82,4 @@ const ItemCardWithAmount = ({
   );
 };
 
-export default ItemCardWithAmount;
+export default ItemCardWithActions;

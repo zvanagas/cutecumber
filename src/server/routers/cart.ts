@@ -4,9 +4,9 @@ import { publicProcedure } from '../trpc';
 const cartRoutes = {
   cart: publicProcedure
     .input(z.object({ cartId: z.number() }))
-    .query(async ({ ctx, input }) =>
-      ctx.prisma.cart.findMany({
-        where: { cartId: input.cartId, isClosed: false },
+    .query(async ({ ctx: { prisma }, input: { cartId } }) =>
+      prisma.cart.findMany({
+        where: { cartId, isClosed: false },
         orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
         include: {
           item: {
@@ -17,8 +17,8 @@ const cartRoutes = {
         },
       })
     ),
-  latestCart: publicProcedure.query(async ({ ctx }) =>
-    ctx.prisma.cart.findMany({
+  latestCart: publicProcedure.query(async ({ ctx: { prisma } }) =>
+    prisma.cart.findMany({
       where: { isClosed: false },
       orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
       include: {
@@ -30,8 +30,8 @@ const cartRoutes = {
       },
     })
   ),
-  latestCartId: publicProcedure.query(async ({ ctx }) =>
-    ctx.prisma.cart.findFirst({
+  latestCartId: publicProcedure.query(async ({ ctx: { prisma } }) =>
+    prisma.cart.findFirst({
       select: { cartId: true },
       where: { isClosed: false },
       orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
@@ -39,9 +39,9 @@ const cartRoutes = {
   ),
   removeFromCart: publicProcedure
     .input(z.object({ cartId: z.number(), itemId: z.number() }))
-    .mutation(({ ctx, input }) =>
-      ctx.prisma.cart.deleteMany({
-        where: { cartId: input.cartId, itemId: input.itemId },
+    .mutation(({ ctx: { prisma }, input: { cartId, itemId } }) =>
+      prisma.cart.deleteMany({
+        where: { cartId, itemId },
       })
     ),
   addToCart: publicProcedure
@@ -51,7 +51,7 @@ const cartRoutes = {
         createNewCart: z.boolean().optional(),
       })
     )
-    .mutation(async ({ ctx: { prisma }, input }) => {
+    .mutation(async ({ ctx: { prisma }, input: { items } }) => {
       const latestOpenCart = await prisma.cart.findFirst({
         where: { isClosed: false },
         orderBy: { cartId: 'desc' },
@@ -64,7 +64,7 @@ const cartRoutes = {
       const cartId =
         latestOpenCart?.cartId ?? (latestClosedCart?.id ?? 0) + 1 ?? 1;
 
-      for (const item of input.items) {
+      for (const item of items) {
         await prisma.cart.create({
           data: {
             cartId,
@@ -97,10 +97,10 @@ const cartRoutes = {
         isPickedUp: z.boolean(),
       })
     )
-    .mutation(({ ctx: { prisma }, input }) =>
+    .mutation(({ ctx: { prisma }, input: { cartId, itemId, isPickedUp } }) =>
       prisma.cart.updateMany({
-        where: { cartId: input.cartId, itemId: input.itemId },
-        data: { isPickedUp: input.isPickedUp },
+        where: { cartId, itemId },
+        data: { isPickedUp },
       })
     ),
 };

@@ -1,8 +1,11 @@
 'use client';
 import { trpc } from '@/client/trpc';
+import BackButton from '@/components/back-button';
 import Button from '@/components/button';
-import ItemCardWithAmount from '@/components/item-card-with-amount';
-import Items from '@/components/items';
+import Dialog from '@/components/dialog';
+import ItemCardWithActions from '@/components/item-card-with-actions';
+import Items from '@/components/items/items';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
 export default function Fridge() {
@@ -12,15 +15,21 @@ export default function Fridge() {
   const { mutate: deleteItem } = trpc.deleteFridgeItem.useMutation();
   const [searchValue, setSearchValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const items = useMemo(
     () =>
-      data?.filter((it) => it.item.name.toLowerCase().includes(searchValue)),
+      data?.filter((it) => it.item.name.toLowerCase().includes(searchValue)) ??
+      [],
     [data, searchValue]
   );
 
   return (
     <>
-      <div className={`flex flex-col gap-2 w-full items-center p-2`}>
+      <BackButton
+        className="absolute top-2 left-2"
+        onClick={() => router.back()}
+      />
+      <div className="flex flex-col gap-2 w-full items-center p-2">
         <h1 className="text-black text-xl">What&apos;s inside a fridge?</h1>
         <input
           className="w-30 h-8 text-black p-1 border rounded"
@@ -28,8 +37,9 @@ export default function Fridge() {
           onChange={(e) => setSearchValue(e.target.value)}
         />
         <div className="flex flex-col items-center w-full gap-2">
-          {items?.map(({ item, amount }) => (
-            <ItemCardWithAmount
+          {items.length < 1 && <span>No items in the fridge...</span>}
+          {items.map(({ item, amount }) => (
+            <ItemCardWithActions
               key={item.id}
               item={item}
               amount={amount}
@@ -42,27 +52,14 @@ export default function Fridge() {
         </div>
         <Button onClick={() => setIsOpen(true)}>Add to fridge</Button>
       </div>
-      <dialog
-        open={isOpen}
-        className={`bg-transparent top-0 backdrop-blur-lg fixed w-full h-full items-center justify-center ${
-          isOpen && 'flex'
-        }`}
-      >
-        <div className="bg-white border rounded w-11/12 h-5/6 p-2 relative">
-          <button
-            className="absolute right-2 border px-2 rounded"
-            onClick={() => setIsOpen(false)}
-          >
-            X
-          </button>
-          <Items
-            onSave={(items) => {
-              mutate(items);
-              setIsOpen(false);
-            }}
-          />
-        </div>
-      </dialog>
+      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Items
+          onSave={(items) => {
+            mutate(items);
+            setIsOpen(false);
+          }}
+        />
+      </Dialog>
     </>
   );
 }

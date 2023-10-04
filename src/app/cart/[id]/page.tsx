@@ -1,7 +1,7 @@
 'use client';
 import { trpc } from '@/client/trpc';
-import ItemCardWithAmount from '@/components/item-card-with-amount';
-import Items from '@/components/items';
+import ItemCardWithActions from '@/components/item-card-with-actions';
+import Items from '@/components/items/items';
 import Link from 'next/link';
 
 type Props = {
@@ -22,7 +22,7 @@ export default function Cart({ params }: Props) {
       <Link href="/">Go back to home</Link>
       <div className="w-full p-2 flex flex-col items-center gap-2">
         {data?.map((item) => (
-          <ItemCardWithAmount
+          <ItemCardWithActions
             key={item.id}
             item={item.item}
             amount={item.amount}
