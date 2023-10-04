@@ -19,43 +19,50 @@ export default function Fridge() {
   );
 
   return (
-    <div className={`flex flex-col gap-2 w-full items-center p-2`}>
-      <h1 className="text-black text-xl">What&apos;s inside a fridge?</h1>
-      <input
-        className="w-30 h-8 text-black p-1 border rounded"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-      />
-      <div className="flex flex-col items-center w-full gap-2">
-        {items?.map(({ item, amount }) => (
-          <ItemCardWithAmount
-            key={item.id}
-            item={item}
-            amount={amount}
-            onUpdate={(newAmount) => update({ id: item.id, amount: newAmount })}
-            onDelete={() => deleteItem({ id: item.id })}
-          />
-        ))}
+    <>
+      <div className={`flex flex-col gap-2 w-full items-center p-2`}>
+        <h1 className="text-black text-xl">What&apos;s inside a fridge?</h1>
+        <input
+          className="w-30 h-8 text-black p-1 border rounded"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+        <div className="flex flex-col items-center w-full gap-2">
+          {items?.map(({ item, amount }) => (
+            <ItemCardWithAmount
+              key={item.id}
+              item={item}
+              amount={amount}
+              onUpdate={(newAmount) =>
+                update({ id: item.id, amount: newAmount })
+              }
+              onDelete={() => deleteItem({ id: item.id })}
+            />
+          ))}
+        </div>
+        <Button onClick={() => setIsOpen(true)}>Add to fridge</Button>
       </div>
-      <Button onClick={() => setIsOpen(true)}>Add to fridge</Button>
-
       <dialog
         open={isOpen}
-        className="bg-white border p-2 backdrop-blur-lg w-11/12 h-5/6 fixed rounded"
+        className={`bg-transparent top-0 backdrop-blur-lg fixed w-full h-full items-center justify-center ${
+          isOpen && 'flex'
+        }`}
       >
-        <button
-          className="absolute right-2 border px-2 rounded"
-          onClick={() => setIsOpen(false)}
-        >
-          X
-        </button>
-        <Items
-          onSave={(items) => {
-            mutate(items);
-            setIsOpen(false);
-          }}
-        />
+        <div className="bg-white border rounded w-11/12 h-5/6 p-2 relative">
+          <button
+            className="absolute right-2 border px-2 rounded"
+            onClick={() => setIsOpen(false)}
+          >
+            X
+          </button>
+          <Items
+            onSave={(items) => {
+              mutate(items);
+              setIsOpen(false);
+            }}
+          />
+        </div>
       </dialog>
-    </div>
+    </>
   );
 }

@@ -1,18 +1,21 @@
 import '@/styles/globals.css';
 import { ClientProvider } from '@/client/trpc';
+import { ReactNode } from 'react';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+type Props = {
+  children: ReactNode;
+};
+
+export default function RootLayout({ children }: Props) {
   return (
     <ClientProvider>
       <html lang="en">
         <head>
           <title>Cutecumber</title>
         </head>
-        <body>{children}</body>
+        <body className="[&:has(dialog[open])]:overflow-hidden">
+          {children}
+        </body>
       </html>
     </ClientProvider>
   );
