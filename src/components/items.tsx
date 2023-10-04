@@ -6,18 +6,24 @@ import ItemCardWithAmount from '@/components/item-card-with-amount';
 import ItemCard from '@/components/item-card';
 import CloseIcon from '@/icons/close.icon';
 import { ItemWithCategory } from '@/types/item';
+import Button from './button';
 
 interface CartItem {
   item: ItemWithCategory;
   amount: number;
 }
 
+interface SaveParams {
+  items: { itemId: number; amount: number }[];
+}
+
 type Props = {
+  onSave: (items: SaveParams) => void;
   itemsInCart?: CartItem[];
 };
 
-const Items = ({ itemsInCart }: Props) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+const Items = ({ itemsInCart, onSave }: Props) => {
+  const [items, setItems] = useState<CartItem[]>([]);
   const [value, setValue] = useState<string>('');
   const [categoryId, setCategoryId] = useState<number>(1);
   const debouncedValue = useDebounce(value);
@@ -26,29 +32,29 @@ const Items = ({ itemsInCart }: Props) => {
     { enabled: debouncedValue.length > 2 }
   );
   const { data: categories } = trpc.categories.useQuery();
-  const { mutate } = trpc.addToCart.useMutation();
   const { mutate: createItem } = trpc.createItem.useMutation();
 
-  const addToCart = (item: ItemWithCategory, amount: number) => {
-    setCart([...cart, { item, amount }]);
+  const addToBasket = (item: ItemWithCategory, amount: number) => {
+    setItems([...items, { item, amount }]);
     setValue('');
   };
 
-  const saveCart = () => {
-    const items = cart.map((item) => ({
+  const save = () => {
+    const itemsToSave = items.map((item) => ({
       itemId: item.item.id,
       amount: item.amount,
     }));
-    mutate({ items });
+    onSave({ items: itemsToSave });
 
-    setCart([]);
+    setItems([]);
   };
 
   return (
-    <div className="flex flex-col gap-2 items-center">
+    <div className="flex w-full flex-col gap-2 items-center">
+      <span>Search for items</span>
       <div className="relative">
         <input
-          className="w-30 h-8 text-black p-1 border border-black rounded"
+          className="w-30 h-8 text-black p-1 border rounded"
           value={value}
           onChange={(e) => setValue(e.target.value)}
         />
@@ -64,14 +70,14 @@ const Items = ({ itemsInCart }: Props) => {
           key={item.name}
           item={item}
           isDisabled={itemsInCart?.some((it) => it.item.id === item.id)}
-          onUpdate={(amount) => addToCart(item, amount)}
+          onUpdate={(amount) => addToBasket(item, amount)}
         />
       ))}
       {data && data.length < 1 && isFetched && (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
           <div>Name: {value}</div>
           <select
-            className="text-black"
+            className="text-black p-1 border rounded"
             value={categoryId}
             onChange={(e) => setCategoryId(Number(e.target.value))}
           >
@@ -81,26 +87,26 @@ const Items = ({ itemsInCart }: Props) => {
               </option>
             ))}
           </select>
-          <button
+          <Button
             onClick={() =>
               categoryId && createItem({ name: value, categoryId })
             }
           >
             Create item
-          </button>
+          </Button>
         </div>
       )}
-      {cart.length > 0 && (
-        <div className="flex flex-col justify-center items-center mt-10">
-          <span>Added cart items</span>
-          {cart.map((item) => (
+      {items.length > 0 && (
+        <div className="flex flex-col gap-2 justify-center items-center mt-10 w-full">
+          <span>Added items</span>
+          {items.map((item) => (
             <ItemCard
               key={item.item.id}
               item={item.item}
               amount={item.amount}
             />
           ))}
-          <button onClick={saveCart}>Save cart</button>
+          <Button onClick={save}>Save</Button>
         </div>
       )}
     </div>

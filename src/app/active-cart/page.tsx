@@ -9,7 +9,7 @@ export default function ActiveCart() {
 
   return (
     <div className="flex flex-col w-full items-center">
-      <h1 className="text-blue-200 text-xl">Basket</h1>
+      <h1 className="text-black text-xl">Basket</h1>
       <div className="flex flex-col w-full gap-2 mt-4 p-2">
         {data?.map((item) => (
           <div key={item.item.name} className="relative">

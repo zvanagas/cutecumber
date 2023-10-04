@@ -1,4 +1,6 @@
 import { ItemWithCategory } from '@/types/item';
+import { getBgColorClassName } from '@/utils/color.utils';
+import { getFirstLetter } from '@/utils/string.utils';
 import { ReactNode } from 'react';
 
 type Props = {
@@ -20,7 +22,7 @@ const ItemCard = ({
 }: Props) => {
   const getClassNames = () => {
     let baseClasses =
-      'shadow-sm p-2 flex justify-between rounded border border-slate-300 relative';
+      'shadow-sm p-2 flex w-full justify-between rounded border border-slate-300 relative';
 
     if (isDisabled) {
       baseClasses += ' cursor-not-allowed';
@@ -29,13 +31,15 @@ const ItemCard = ({
     return className ? `${baseClasses} ${className}` : baseClasses;
   };
 
-  const getFirstCategoryLetter = (name: string) => name.at(0);
-
   return (
     <div className={getClassNames()} onClick={() => !isDisabled && onClick?.()}>
       <div className="flex gap-2">
-        <div className="flex self-center items-center rounded py-2 px-4 border border-slate-500">
-          {getFirstCategoryLetter(item.category.name)}
+        <div
+          className={`flex self-center items-center rounded py-2 px-4 border border-slate-500 ${getBgColorClassName(
+            item.category.name
+          )}`}
+        >
+          {getFirstLetter(item.category.name)}
         </div>
         <div className="flex flex-col justify-center">
           <span>{item.name}</span>

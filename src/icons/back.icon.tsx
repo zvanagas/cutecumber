@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const CloseIcon = (props: SVGProps<SVGSVGElement>) => (
+const BackIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -13,9 +13,9 @@ const CloseIcon = (props: SVGProps<SVGSVGElement>) => (
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
-      d="M6 18L18 6M6 6l12 12"
+      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
     />
   </svg>
 );
 
-export default CloseIcon;
+export default BackIcon;

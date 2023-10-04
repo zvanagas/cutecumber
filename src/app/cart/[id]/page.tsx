@@ -15,6 +15,7 @@ export default function Cart({ params }: Props) {
   const { data } = trpc.cart.useQuery({ cartId });
   const { mutate: remove } = trpc.removeFromCart.useMutation();
   const { mutate: updateAmount } = trpc.updateItemAmount.useMutation();
+  const { mutate: addToCart } = trpc.addToCart.useMutation();
 
   return (
     <div className="flex flex-col items-center gap-2 w-full">
@@ -32,7 +33,7 @@ export default function Cart({ params }: Props) {
           />
         ))}
       </div>
-      <Items itemsInCart={data} />
+      <Items itemsInCart={data} onSave={addToCart} />
     </div>
   );
 }

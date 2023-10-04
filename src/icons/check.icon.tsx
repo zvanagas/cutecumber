@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const CheckIcon: React.FC<SVGProps<SVGSVGElement>> = (props) => (
+const CheckIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"

@@ -13,21 +13,23 @@ type Props = {
 
 const ItemCardWithAmount = ({
   item,
-  amount = 1,
+  amount,
   isDisabled,
   onUpdate,
   onDelete,
 }: Props) => {
-  const [currAmount, setCurrAmount] = useState(amount);
+  const [currAmount, setCurrAmount] = useState(1);
 
   useEffect(() => {
-    setCurrAmount(amount);
+    if (amount) {
+      setCurrAmount(amount);
+    }
   }, [amount]);
 
   const renderContent = () => (
     <div className="flex flex-col justify-between items-end gap-6">
       {onDelete && (
-        <button className="" onClick={onDelete}>
+        <button onClick={onDelete}>
           <CloseIcon />
         </button>
       )}
@@ -59,7 +61,7 @@ const ItemCardWithAmount = ({
                 {currAmount}
               </span>
               <button
-                className={`border border-slate-300 px-2 rounded-r-md`}
+                className="border border-slate-300 px-2 rounded-r-md"
                 onClick={() => setCurrAmount(currAmount + 1)}
               >
                 +

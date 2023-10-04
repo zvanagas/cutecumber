@@ -1,38 +1,26 @@
 'use client';
 import { trpc } from '@/client/trpc';
+import Card from '@/components/card';
 import BasketIcon from '@/icons/basket.icon';
+import MilkIcon from '@/icons/milk.icon';
 import SaladIcon from '@/icons/salad.icon';
-import { useRouter } from 'next/navigation';
+import WatermelonIcon from '@/icons/watermelon.icon';
 
 export default function Home() {
-  const router = useRouter();
   const { data } = trpc.latestCartId.useQuery();
 
   return (
-    <div className="flex flex-col items-center p-4 gap-4">
-      <div
-        className="flex items-center gap-2 p-4 cursor-pointer bg-white rounded text-black"
-        onClick={() => router.push("/active-cart")}
-      >
-        <span>Shopping cart</span>
-        <BasketIcon className="w-14 h-14" />
-      </div>
+    <div className="flex flex-col items-center w-full p-2 gap-4">
+      <Card link="/active-cart" label="Active cart" Icon={BasketIcon} />
       {!!data && (
-        <div
-          className="flex items-center gap-2 p-4 cursor-pointer bg-white rounded text-black"
-          onClick={() => router.push(`/cart/${data?.cartId}`)}
-        >
-          <span>Edit active cart</span>
-          <BasketIcon className="w-14 h-14" />
-        </div>
+        <Card
+          link={`/cart/${data?.cartId}`}
+          label="Edit active cart"
+          Icon={WatermelonIcon}
+        />
       )}
-      <div
-        className="flex items-center gap-2 p-4 cursor-pointer bg-white rounded text-black"
-        onClick={() => router.push("/items")}
-      >
-        <span>Manage items</span>
-        <SaladIcon className="w-14 h-14" />
-      </div>
+      <Card link="/items" label="Manage items" Icon={SaladIcon} />
+      <Card link="/fridge" label="What's inside a fridge?" Icon={MilkIcon} />
     </div>
   );
 }

@@ -21,6 +21,7 @@ model Item {
   timesBought Int      @default(0)
   categoryId  Int
   carts       Cart[]
+  Fridge      Fridge[]
 }
 
 model Cart {
@@ -33,4 +34,12 @@ model Cart {
   updatedAt  DateTime  @default(now())
   closedAt   DateTime?
   itemId     Int
+}
+
+model Fridge {
+  id        Int      @id @default(autoincrement())
+  item      Item     @relation(fields: [itemId], references: [id])
+  amount    Int
+  updatedAt DateTime @default(now())
+  itemId    Int
 }
