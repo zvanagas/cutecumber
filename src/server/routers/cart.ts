@@ -75,6 +75,23 @@ const cartRoutes = {
         });
       }
     }),
+  closeActiveCart: publicProcedure.mutation(async ({ ctx: { prisma } }) => {
+    const latestCart = await prisma.cart.findFirst({
+      select: { cartId: true },
+      where: { isClosed: false },
+      orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
+    });
+
+    return prisma.cart.updateMany({
+      data: {
+        isClosed: true,
+      },
+      where: {
+        cartId: latestCart?.cartId,
+        isClosed: false,
+      },
+    });
+  }),
   updateItemAmount: publicProcedure
     .input(
       z.object({

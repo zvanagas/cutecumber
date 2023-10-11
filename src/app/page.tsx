@@ -12,12 +12,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center w-full p-2 gap-4">
       <Card link="/fridge" label="What's inside a fridge?" Icon={MilkIcon} />
-      <Card
-        link="/active-cart"
-        label="Active cart"
-        Icon={BasketIcon}
-        isDisabled
-      />
+      <Card link="/active-cart" label="Active cart" Icon={BasketIcon} />
       {!!data && (
         <Card
           link={`/cart/${data?.cartId}`}

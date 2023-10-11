@@ -44,21 +44,21 @@ const ItemCardWithActions = ({
             <div className="flex">
               {currAmount > 1 && (
                 <Button
-                  className="rounded-l-md"
+                  className="rounded-l-md bg-yellow-300"
                   onClick={() => setCurrAmount(currAmount - 1)}
                 >
                   -
                 </Button>
               )}
               <span
-                className={`px-2 border-y border-slate-300 ${
+                className={`flex items-center px-2 border-y ${
                   currAmount < 2 && 'border-l rounded-l-md'
                 }`}
               >
                 {currAmount}
               </span>
               <Button
-                className="px-2 rounded-r-md"
+                className="px-2 rounded-r-md bg-green-300"
                 onClick={() => setCurrAmount(currAmount + 1)}
               >
                 +
