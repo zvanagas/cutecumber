@@ -21,7 +21,7 @@ function getBaseUrl() {
 }
 
 export const trpc = createTRPCReact<AppRouter>({
-  unstable_overrides: {
+  overrides: {
     useMutation: {
       async onSuccess(opts) {
         await opts.originalFn();
