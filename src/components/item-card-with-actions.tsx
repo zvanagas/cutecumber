@@ -58,7 +58,7 @@ const ItemCardWithActions = ({
                 {currAmount}
               </span>
               <Button
-                className="px-2 rounded-r-md bg-green-300"
+                className="px-2 rounded-r-md bg-lime-300"
                 onClick={() => setCurrAmount(currAmount + 1)}
               >
                 +

@@ -3,10 +3,27 @@ import { publicProcedure } from '../trpc';
 
 const itemsRoutes = {
   items: publicProcedure
-    .input(z.object({ q: z.string().nullish() }).nullish())
+    .input(
+      z
+        .object({ q: z.string().nullish(), categoryId: z.number().optional() })
+        .nullish()
+    )
     .query(async ({ ctx, input }) =>
       ctx.prisma.item.findMany({
-        where: { name: { contains: input?.q ?? '', mode: 'insensitive' } },
+        where: {
+          name: { contains: input?.q ?? '', mode: 'insensitive' },
+          categoryId: input?.categoryId,
+        },
+        include: {
+          category: true,
+        },
+      })
+    ),
+  getItemsByCategoryId: publicProcedure
+    .input(z.object({ categoryId: z.number() }))
+    .query(async ({ ctx, input }) =>
+      ctx.prisma.item.findMany({
+        where: { categoryId: input.categoryId },
         include: {
           category: true,
         },

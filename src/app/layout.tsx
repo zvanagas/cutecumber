@@ -1,6 +1,8 @@
+'use client';
 import '@/styles/globals.css';
 import { ClientProvider } from '@/client/trpc';
 import { ReactNode } from 'react';
+import { SessionProvider } from 'next-auth/react';
 
 type Props = {
   children: ReactNode;
@@ -9,14 +11,16 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <ClientProvider>
-      <html lang="en">
-        <head>
-          <title>Cutecumber</title>
-        </head>
-        <body className="[&:has(dialog[open])]:overflow-hidden">
-          {children}
-        </body>
-      </html>
+      <SessionProvider>
+        <html lang="en">
+          <head>
+            <title>Cutecumber</title>
+          </head>
+          <body className="[&:has(dialog[open])]:overflow-hidden">
+            {children}
+          </body>
+        </html>
+      </SessionProvider>
     </ClientProvider>
   );
 }

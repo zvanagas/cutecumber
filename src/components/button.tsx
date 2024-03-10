@@ -4,12 +4,14 @@ type Props = {
   children: ReactNode;
   onClick: () => void;
   className?: string;
+  isDisabled?: boolean;
 };
 
-const Button = ({ children, className, onClick }: Props) => (
+const Button = ({ children, className, isDisabled, onClick }: Props) => (
   <button
-    className={`bg-white shadow-sm border px-2 py-1 rounded ${className}`}
+    className={`shadow-sm border px-2 py-1 rounded-md ${className}`}
     onClick={onClick}
+    disabled={isDisabled}
   >
     {children}
   </button>

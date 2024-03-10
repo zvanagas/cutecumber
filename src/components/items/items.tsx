@@ -1,34 +1,29 @@
 'use client';
 import { trpc } from '@/client/trpc';
-import { useState } from 'react';
-import useDebounce from '@/hooks/use-debounce';
 import ItemCardWithActions from '@/components/item-card-with-actions';
-import CloseIcon from '@/icons/close.icon';
 import { ItemWithCategory } from '@/types/item';
 import Button from '../button';
-import { startingSearchLimit } from '@/constants/search-limit';
 import { CartItem, SaveParams } from './interfaces/items';
+import { useState } from 'react';
+import Categories from '../categories';
 
 type Props = {
-  onSave: (items: SaveParams) => void;
   itemsInCart?: CartItem[];
+  isBasketMode?: boolean;
+  onSave?: (items: SaveParams) => void;
 };
 
-const Items = ({ itemsInCart, onSave }: Props) => {
+const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [value, setValue] = useState<string>('');
-  const [categoryId, setCategoryId] = useState<number>(1);
-  const debouncedValue = useDebounce(value);
-  const { data, isFetched } = trpc.items.useQuery(
-    { q: debouncedValue },
-    { enabled: debouncedValue.length >= startingSearchLimit }
-  );
+  const [categoryId, setCategoryId] = useState<number>();
   const { data: categories } = trpc.categories.useQuery();
-  const { mutate: createItem } = trpc.createItem.useMutation();
+  const { data, isFetching, isFetched } = trpc.items.useQuery({
+    q: '',
+    categoryId,
+  });
 
   const addToBasket = (item: ItemWithCategory, amount: number) => {
     setItems([...items, { item, amount }]);
-    setValue('');
   };
 
   const removeFromBasket = (itemId: number) => {
@@ -40,58 +35,34 @@ const Items = ({ itemsInCart, onSave }: Props) => {
       itemId: item.item.id,
       amount: item.amount,
     }));
-    onSave({ items: itemsToSave });
+    onSave?.({ items: itemsToSave });
 
     setItems([]);
   };
 
   return (
-    <div className="flex w-full flex-col gap-2 items-center">
-      <span>Search for items</span>
-      <div className="relative">
-        <input
-          className="w-30 h-8 text-black p-1 border rounded"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        {value && (
-          <CloseIcon
-            className="absolute top-[5px] right-1 w-6 text-black cursor-pointer"
-            onClick={() => setValue('')}
-          />
-        )}
+    <div className="flex w-full flex-col gap-4 items-center px-4">
+      <span>Items</span>
+      <Categories
+        categories={categories}
+        categoryId={categoryId}
+        onCategoryClick={setCategoryId}
+      />
+      <div className="flex flex-col items-center w-full gap-2">
+        {isFetching && <div>Loading...</div>}
+        {!isFetching && isFetched && !data?.length && <div>No items...</div>}
+        {!isFetching &&
+          data?.map((item) => (
+            <ItemCardWithActions
+              key={item.name}
+              item={item}
+              isDisabled={itemsInCart?.some((it) => it.item.id === item.id)}
+              onUpdate={
+                isBasketMode ? (amount) => addToBasket(item, amount) : undefined
+              }
+            />
+          ))}
       </div>
-      {data?.map((item) => (
-        <ItemCardWithActions
-          key={item.name}
-          item={item}
-          isDisabled={itemsInCart?.some((it) => it.item.id === item.id)}
-          onUpdate={(amount) => addToBasket(item, amount)}
-        />
-      ))}
-      {data && data.length < 1 && isFetched && (
-        <div className="flex flex-col gap-2">
-          <div>Name: {value}</div>
-          <select
-            className="text-black p-1 border rounded"
-            value={categoryId}
-            onChange={(e) => setCategoryId(Number(e.target.value))}
-          >
-            {categories?.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          <Button
-            onClick={() =>
-              categoryId && createItem({ name: value, categoryId })
-            }
-          >
-            Create item
-          </Button>
-        </div>
-      )}
       {items.length > 0 && (
         <div className="flex flex-col gap-2 justify-center items-center mt-10 w-full">
           <span>Added items</span>
@@ -103,7 +74,12 @@ const Items = ({ itemsInCart, onSave }: Props) => {
               onDelete={() => removeFromBasket(item.item.id)}
             />
           ))}
-          <Button onClick={save}>Save</Button>
+          <Button
+            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300"
+            onClick={save}
+          >
+            Save
+          </Button>
         </div>
       )}
     </div>

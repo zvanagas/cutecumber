@@ -14,7 +14,7 @@ type Props = {
   };
 };
 
-export default function Cart({ params }: Props) {
+export default function CartPage({ params }: Props) {
   const cartId = Number(params.id);
   const [isOpen, setIsOpen] = useState(false);
   const { data } = trpc.cart.useQuery({ cartId });
@@ -48,6 +48,7 @@ export default function Cart({ params }: Props) {
 
         <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <Items
+            isBasketMode
             itemsInCart={data}
             onSave={(items) => {
               addToCart(items);
