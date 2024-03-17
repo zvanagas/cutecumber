@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const SaladIcon = (props: SVGProps<SVGSVGElement>) => (
+export const SaladIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -117,5 +117,3 @@ const SaladIcon = (props: SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
-
-export default SaladIcon;

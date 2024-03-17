@@ -1,98 +1,116 @@
 import { z } from 'zod';
 import { publicProcedure } from '../trpc';
+import { getServerSession } from 'next-auth';
 
-const cartRoutes = {
-  cart: publicProcedure
+export const cartRouter = {
+  getSingle: publicProcedure
     .input(z.object({ cartId: z.number() }))
     .query(async ({ ctx: { prisma }, input: { cartId } }) =>
-      prisma.cart.findMany({
-        where: { cartId, isClosed: false },
-        orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
+      prisma.cart.findFirst({
+        where: { id: cartId, isClosed: false },
+        orderBy: [{ id: 'desc' }],
         include: {
-          item: {
+          items: {
             include: {
-              category: true,
+              item: {
+                include: {
+                  category: true,
+                },
+              },
             },
           },
         },
       })
     ),
-  latestCart: publicProcedure.query(async ({ ctx: { prisma } }) =>
-    prisma.cart.findMany({
+  getLatest: publicProcedure.query(async ({ ctx: { prisma } }) =>
+    prisma.cart.findFirst({
       where: { isClosed: false },
-      orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
+      orderBy: [{ id: 'desc' }],
       include: {
-        item: {
+        items: {
           include: {
-            category: true,
+            item: {
+              include: {
+                category: true,
+              },
+            },
           },
         },
       },
     })
   ),
-  latestCartId: publicProcedure.query(async ({ ctx: { prisma } }) =>
+  getLatestId: publicProcedure.query(async ({ ctx: { prisma } }) =>
     prisma.cart.findFirst({
-      select: { cartId: true },
+      select: { id: true },
       where: { isClosed: false },
-      orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
+      orderBy: [{ id: 'desc' }],
     })
   ),
-  removeFromCart: publicProcedure
+  create: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ ctx: { prisma }, input: { name } }) => {
+      const session = await getServerSession();
+
+      if (!session?.user.id) {
+        return;
+      }
+
+      return prisma.cart.create({
+        data: {
+          name,
+          ownerId: session.user.id,
+        },
+      });
+    }),
+  removeSingle: publicProcedure
     .input(z.object({ cartId: z.number(), itemId: z.number() }))
     .mutation(({ ctx: { prisma }, input: { cartId, itemId } }) =>
-      prisma.cart.deleteMany({
+      prisma.cartItem.deleteMany({
         where: { cartId, itemId },
       })
     ),
-  addToCart: publicProcedure
+  add: publicProcedure
     .input(
       z.object({
+        cartId: z.number(),
         items: z.array(z.object({ itemId: z.number(), amount: z.number() })),
-        createNewCart: z.boolean().optional(),
       })
     )
-    .mutation(async ({ ctx: { prisma }, input: { items } }) => {
-      const latestOpenCart = await prisma.cart.findFirst({
-        where: { isClosed: false },
-        orderBy: { cartId: 'desc' },
-      });
-      const latestClosedCart = await prisma.cart.findFirst({
-        where: { isClosed: true },
-        orderBy: { cartId: 'desc' },
-      });
+    .mutation(async ({ ctx: { prisma }, input: { cartId, items } }) => {
+      const session = await getServerSession();
 
-      const cartId =
-        latestOpenCart?.cartId ?? (latestClosedCart?.id ?? 0) + 1 ?? 1;
+      if (!session?.user.id) {
+        return;
+      }
 
       for (const item of items) {
-        await prisma.cart.create({
+        await prisma.cartItem.create({
           data: {
             cartId,
+            userId: session.user.id,
             itemId: item.itemId,
-            isClosed: false,
             amount: item.amount,
           },
         });
       }
     }),
-  closeActiveCart: publicProcedure.mutation(async ({ ctx: { prisma } }) => {
-    const latestCart = await prisma.cart.findFirst({
-      select: { cartId: true },
-      where: { isClosed: false },
-      orderBy: [{ id: 'asc' }, { cartId: 'desc' }],
-    });
-
-    return prisma.cart.updateMany({
-      data: {
-        isClosed: true,
-      },
-      where: {
-        cartId: latestCart?.cartId,
-        isClosed: false,
-      },
-    });
-  }),
-  updateItemAmount: publicProcedure
+  close: publicProcedure
+    .input(
+      z.object({
+        cartId: z.number(),
+      })
+    )
+    .mutation(async ({ ctx: { prisma }, input: { cartId } }) =>
+      prisma.cart.update({
+        where: {
+          id: cartId,
+        },
+        data: {
+          isClosed: true,
+        },
+      })
+    ),
+  updateAmount: publicProcedure
     .input(
       z.object({
         cartId: z.number(),
@@ -100,10 +118,10 @@ const cartRoutes = {
         amount: z.number(),
       })
     )
-    .mutation(({ ctx: { prisma }, input }) =>
-      prisma.cart.updateMany({
-        where: { cartId: input.cartId, itemId: input.itemId },
-        data: { amount: input.amount },
+    .mutation(({ ctx: { prisma }, input: { cartId, itemId, amount } }) =>
+      prisma.cartItem.updateMany({
+        where: { cartId, itemId },
+        data: { amount },
       })
     ),
   togglePickUp: publicProcedure
@@ -115,11 +133,9 @@ const cartRoutes = {
       })
     )
     .mutation(({ ctx: { prisma }, input: { cartId, itemId, isPickedUp } }) =>
-      prisma.cart.updateMany({
+      prisma.cartItem.updateMany({
         where: { cartId, itemId },
         data: { isPickedUp },
       })
     ),
 };
-
-export default cartRoutes;

@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const WatermelonIcon = (props: SVGProps<SVGSVGElement>) => (
+export const WatermelonIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -37,5 +37,3 @@ const WatermelonIcon = (props: SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
-
-export default WatermelonIcon;

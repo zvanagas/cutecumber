@@ -16,8 +16,8 @@ type Props = {
 const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [categoryId, setCategoryId] = useState<number>();
-  const { data: categories } = trpc.categories.useQuery();
-  const { data, isFetching, isFetched } = trpc.items.useQuery({
+  const { data: categories } = trpc.categories.getAll.useQuery();
+  const { data, isFetching, isFetched } = trpc.items.getAll.useQuery({
     q: '',
     categoryId,
   });

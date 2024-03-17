@@ -1,4 +1,4 @@
-import BackIcon from '@/icons/back.icon';
+import { BackIcon } from '@/icons/back.icon';
 import Button from './button';
 
 type Props = {

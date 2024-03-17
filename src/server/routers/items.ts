@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { publicProcedure } from '../trpc';
 
-const itemsRoutes = {
-  items: publicProcedure
+export const itemsRouter = {
+  getAll: publicProcedure
     .input(
       z
         .object({ q: z.string().nullish(), categoryId: z.number().optional() })
@@ -19,7 +19,7 @@ const itemsRoutes = {
         },
       })
     ),
-  getItemsByCategoryId: publicProcedure
+  getByCategoryId: publicProcedure
     .input(z.object({ categoryId: z.number() }))
     .query(async ({ ctx, input }) =>
       ctx.prisma.item.findMany({
@@ -29,7 +29,7 @@ const itemsRoutes = {
         },
       })
     ),
-  createItem: publicProcedure
+  create: publicProcedure
     .input(z.object({ name: z.string(), categoryId: z.number() }))
     .mutation(({ ctx: { prisma }, input }) =>
       prisma.item.create({
@@ -40,5 +40,3 @@ const itemsRoutes = {
       })
     ),
 };
-
-export default itemsRoutes;

@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const MilkIcon = (props: SVGProps<SVGSVGElement>) => (
+export const MilkIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     height="800px"
     width="800px"
@@ -42,5 +42,3 @@ const MilkIcon = (props: SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
-
-export default MilkIcon;

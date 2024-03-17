@@ -1,5 +1,5 @@
 import ItemCard from './item-card';
-import CheckIcon from '@/icons/check.icon';
+import { CheckIcon } from '@/icons/check.icon';
 import { CartItemWithCategory } from '@/types/item';
 
 type Props = {

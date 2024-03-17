@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { publicProcedure } from '../trpc';
 
-const fridgeRoutes = {
-  getfridgeItems: publicProcedure.query(async ({ ctx: { prisma } }) =>
+export const fridgeRouter = {
+  getAll: publicProcedure.query(async ({ ctx: { prisma } }) =>
     prisma.fridge.findMany({
       include: {
         item: {
@@ -16,7 +16,7 @@ const fridgeRoutes = {
       },
     })
   ),
-  saveItemsToFridge: publicProcedure
+  save: publicProcedure
     .input(
       z.object({
         items: z.array(z.object({ itemId: z.number(), amount: z.number() })),
@@ -54,7 +54,7 @@ const fridgeRoutes = {
         await prisma.fridge.createMany({ data: newItems });
       }
     }),
-  updateFridgeItem: publicProcedure
+  updateSingle: publicProcedure
     .input(z.object({ id: z.number(), amount: z.number() }))
     .mutation(async ({ ctx: { prisma }, input }) =>
       prisma.fridge.updateMany({
@@ -67,7 +67,7 @@ const fridgeRoutes = {
       })
     ),
 
-  deleteFridgeItem: publicProcedure
+  deleteSingle: publicProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx: { prisma }, input }) =>
       prisma.fridge.deleteMany({
@@ -77,5 +77,3 @@ const fridgeRoutes = {
       })
     ),
 };
-
-export default fridgeRoutes;

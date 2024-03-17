@@ -8,10 +8,10 @@ import NavigationBar from '@/components/navigation-bar';
 import { useMemo, useState } from 'react';
 
 export default function FridgePage() {
-  const { data } = trpc.getfridgeItems.useQuery();
-  const { mutate } = trpc.saveItemsToFridge.useMutation();
-  const { mutate: update } = trpc.updateFridgeItem.useMutation();
-  const { mutate: deleteItem } = trpc.deleteFridgeItem.useMutation();
+  const { data } = trpc.fridge.getAll.useQuery();
+  const { mutate } = trpc.fridge.save.useMutation();
+  const { mutate: update } = trpc.fridge.updateSingle.useMutation();
+  const { mutate: deleteItem } = trpc.fridge.deleteSingle.useMutation();
   const [searchValue, setSearchValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const items = useMemo(

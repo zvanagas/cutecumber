@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-const BasketIcon = (props: SVGProps<SVGSVGElement>) => (
+export const BasketIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -105,5 +105,3 @@ const BasketIcon = (props: SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
-
-export default BasketIcon;

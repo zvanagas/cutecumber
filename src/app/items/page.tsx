@@ -4,18 +4,19 @@ import Button from '@/components/button';
 import Items from '@/components/items/items';
 import NavigationBar from '@/components/navigation-bar';
 import useDebounce from '@/hooks/use-debounce';
-import CloseIcon from '@/icons/close.icon';
+import { CloseIcon } from '@/icons/close.icon';
 import { useState } from 'react';
 
 export default function ItemsPage() {
-  const [isCreationMode, setIsCreationMode] = useState<boolean>(false);
-  const { mutate: addToCart } = trpc.addToCart.useMutation();
-  const [value, setValue] = useState<string>('');
-  const [categoryId, setCategoryId] = useState<number>(1);
-  const { data: categories } = trpc.categories.useQuery();
-  const { mutate: createItem } = trpc.createItem.useMutation();
+  const [isCreationMode, setIsCreationMode] = useState(false);
+  const { mutate: addToCart } = trpc.cart.add.useMutation();
+  const [value, setValue] = useState('');
+  const [categoryId, setCategoryId] = useState(1);
+  const { data: categories } = trpc.categories.getAll.useQuery();
+  const { mutate: createItem } = trpc.items.create.useMutation();
+  const { data: latestCart } = trpc.cart.getLatestId.useQuery();
   const debouncedValue = useDebounce(value);
-  const { data } = trpc.items.useQuery(
+  const { data } = trpc.items.getAll.useQuery(
     {
       q: debouncedValue,
     },
@@ -68,7 +69,12 @@ export default function ItemsPage() {
           </Button>
         </div>
       ) : (
-        <Items isBasketMode onSave={(items) => addToCart(items)} />
+        <Items
+          isBasketMode
+          onSave={({ items }) =>
+            latestCart && addToCart({ cartId: latestCart.id, items })
+          }
+        />
       )}
     </div>
   );

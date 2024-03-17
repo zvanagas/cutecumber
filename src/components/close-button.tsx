@@ -1,4 +1,4 @@
-import CloseIcon from '@/icons/close.icon';
+import { CloseIcon } from '@/icons/close.icon';
 import Button from './button';
 
 type Props = {

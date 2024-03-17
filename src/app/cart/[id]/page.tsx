@@ -17,10 +17,10 @@ type Props = {
 export default function CartPage({ params }: Props) {
   const cartId = Number(params.id);
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = trpc.cart.useQuery({ cartId });
-  const { mutate: remove } = trpc.removeFromCart.useMutation();
-  const { mutate: updateAmount } = trpc.updateItemAmount.useMutation();
-  const { mutate: addToCart } = trpc.addToCart.useMutation();
+  const { data } = trpc.cart.getSingle.useQuery({ cartId });
+  const { mutate: remove } = trpc.cart.removeSingle.useMutation();
+  const { mutate: updateAmount } = trpc.cart.updateAmount.useMutation();
+  const { mutate: addToCart } = trpc.cart.add.useMutation();
   const router = useRouter();
 
   return (
@@ -32,7 +32,7 @@ export default function CartPage({ params }: Props) {
       <div className="flex flex-col items-center gap-2 w-full">
         <h1 className="text-black text-xl">Edit active cart</h1>
         <div className="w-full p-2 flex flex-col items-center gap-2">
-          {data?.map((item) => (
+          {data?.items.map((item) => (
             <ItemCardWithActions
               key={item.id}
               item={item.item}
@@ -49,9 +49,9 @@ export default function CartPage({ params }: Props) {
         <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <Items
             isBasketMode
-            itemsInCart={data}
-            onSave={(items) => {
-              addToCart(items);
+            itemsInCart={data?.items}
+            onSave={({ items }) => {
+              addToCart({ cartId, items });
               setIsOpen(false);
             }}
           />
