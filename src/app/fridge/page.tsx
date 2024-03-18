@@ -25,15 +25,19 @@ export default function FridgePage() {
     <div className="flex flex-col gap-4">
       <NavigationBar isBackButtonShown />
       <div className="px-4">
-        <div className="flex flex-col gap-2 w-full items-center p-4 rounded shadow-md">
-          <h1 className="text-black text-xl">What&apos;s inside a fridge?</h1>
+        <div className="flex flex-col gap-2 w-full items-center p-4">
+          <h1 className="text-black dark:text-white text-xl">
+            What&apos;s inside a fridge?
+          </h1>
           <input
             className="w-30 h-8 text-black p-4 border rounded-md"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
           <div className="flex flex-col items-center w-full gap-2">
-            {items.length < 1 && <span>No items in the fridge...</span>}
+            {items.length < 1 && (
+              <span className="dark:text-white">No items in the fridge...</span>
+            )}
             {items.map(({ item, amount }) => (
               <ItemCardWithActions
                 key={item.id}

@@ -16,7 +16,7 @@ const Categories = ({ categories, categoryId, onCategoryClick }: Props) => (
         checked={!categoryId}
         onChange={() => onCategoryClick(undefined)}
       />
-      <div className="rounded-md px-2 py-1 box-border border peer-checked:bg-green-600 peer-checked:text-white">
+      <div className="rounded-md px-2 py-1 box-border border dark:text-white peer-checked:bg-green-600 peer-checked:text-white">
         All
       </div>
     </label>
@@ -30,7 +30,7 @@ const Categories = ({ categories, categoryId, onCategoryClick }: Props) => (
           checked={categoryId === id}
           onChange={({ target }) => onCategoryClick(Number(target.value))}
         />
-        <div className="rounded-md px-2 py-1 box-border border peer-checked:bg-green-600 peer-checked:text-white">
+        <div className="rounded-md px-2 py-1 box-border border dark:text-white peer-checked:bg-green-600 peer-checked:text-white">
           {name}
         </div>
       </label>

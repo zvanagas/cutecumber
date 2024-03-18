@@ -13,7 +13,7 @@ export default function CreateCategoryPage() {
   return (
     <div className="flex flex-col w-full items-center gap-4">
       <NavigationBar isBackButtonShown />
-      <span>Name</span>
+      <span className="dark:text-white">Name</span>
       <input
         className="w-30 h-8 text-black p-4 border rounded-md"
         value={name}

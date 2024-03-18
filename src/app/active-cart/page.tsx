@@ -32,9 +32,11 @@ export default function ActiveCartPage() {
 
   const renderSelectableCart = () => (
     <>
-      <h1 className="text-black text-xl">Basket</h1>
+      <h1 className="text-black dark:text-white text-xl">Basket</h1>
       <div className="flex flex-col w-full gap-2 mt-4 p-2">
-        {!data?.items.length && <span>No items in basket...</span>}
+        {!data?.items.length && (
+          <span className="dark:text-white">No items in basket...</span>
+        )}
         {data?.items.map((item) => (
           <div key={item.item.name} className="relative">
             <ItemCardSelected
@@ -60,7 +62,7 @@ export default function ActiveCartPage() {
 
   const renderEditableCart = () => (
     <>
-      <h1 className="text-black text-xl">Edit active cart</h1>
+      <h1 className="text-black dark:text-white text-xl">Edit active cart</h1>
       <div className="w-full p-2 flex flex-col items-center gap-2">
         {data?.items.map((item) => (
           <ItemCardWithActions

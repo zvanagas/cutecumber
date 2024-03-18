@@ -13,7 +13,7 @@ const Card = ({ link, label, Icon, isDisabled }: Props) => {
 
   return (
     <div
-      className={`flex items-center justify-between w-full gap-2 p-4  bg-white rounded text-black shadow-md ${
+      className={`flex items-center justify-between w-full gap-2 p-4  bg-white dark:bg-slate-800 rounded text-black dark:text-white shadow-sm dark:shadow-white ${
         isDisabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'
       }`}
       onClick={() => !isDisabled && router.push(link)}

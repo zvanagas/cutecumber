@@ -42,15 +42,17 @@ const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
 
   return (
     <div className="flex w-full flex-col gap-4 items-center px-4">
-      <span>Items</span>
+      <span className="dark:text-white">Items</span>
       <Categories
         categories={categories}
         categoryId={categoryId}
         onCategoryClick={setCategoryId}
       />
       <div className="flex flex-col items-center w-full gap-2">
-        {isFetching && <div>Loading...</div>}
-        {!isFetching && isFetched && !data?.length && <div>No items...</div>}
+        {isFetching && <div className="dark:text-white">Loading...</div>}
+        {!isFetching && isFetched && !data?.length && (
+          <div className="dark:text-white">No items...</div>
+        )}
         {!isFetching &&
           data?.map((item) => (
             <ItemCardWithActions

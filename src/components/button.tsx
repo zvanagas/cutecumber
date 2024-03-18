@@ -9,7 +9,7 @@ type Props = {
 
 const Button = ({ children, className, isDisabled, onClick }: Props) => (
   <button
-    className={`shadow-sm border px-2 py-1 rounded-md ${className}`}
+    className={`shadow-sm border px-2 py-1 rounded-md dark:text-white dark:shadow-white ${className}`}
     onClick={onClick}
     disabled={isDisabled}
   >

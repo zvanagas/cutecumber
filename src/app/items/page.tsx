@@ -31,8 +31,8 @@ export default function ItemsPage() {
         </Button>
       </NavigationBar>
       {isCreationMode ? (
-        <div className="flex flex-col items-center justify-between w-full gap-2 p-4 bg-white rounded text-black shadow-md">
-          <span>Item name</span>
+        <div className="flex flex-col items-center justify-between w-full gap-2 p-4 bg-white dark:bg-slate-800 rounded text-black shadow-sm">
+          <span className="dark:text-white">Item name</span>
           <div className="relative">
             <input
               className="w-52 h-8 text-black p-4 border rounded-md"
@@ -46,7 +46,7 @@ export default function ItemsPage() {
               />
             )}
           </div>
-          <span>Category</span>
+          <span className="dark:text-white">Category</span>
           <select
             className="w-52 text-black p-1 border rounded"
             value={categoryId}
