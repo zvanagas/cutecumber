@@ -41,7 +41,7 @@ const ItemCard = ({
         >
           {getFirstLetter(item.category.name)}
         </div>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center dark:text-white">
           <span>{item.name}</span>
           {!!amount && <span>Amount: {amount}</span>}
         </div>

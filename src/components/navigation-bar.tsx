@@ -21,7 +21,7 @@ const NavigationBar = ({ children, isBackButtonShown }: Props) => {
       </div>
       {status === 'authenticated' && (
         <div className="flex flex-1 w-full justify-end items-center gap-2 dark:text-white">
-          <span className="text-right">{data.user?.name}</span>
+          <span className="text-right hidden sm:block">{data.user?.name}</span>
           <Button onClick={() => signOut()}>Logout</Button>
         </div>
       )}

@@ -58,13 +58,13 @@ model VerificationToken {
 
 model Category {
   id    Int    @id @default(autoincrement())
-  name  String
+  name  String @unique
   items Item[]
 }
 
 model Item {
   id          Int        @id @default(autoincrement())
-  name        String
+  name        String     @unique
   category    Category   @relation(fields: [categoryId], references: [id])
   timesBought Int        @default(0)
   categoryId  Int
@@ -74,7 +74,7 @@ model Item {
 
 model Cart {
   id        Int        @id @default(autoincrement())
-  name      String
+  name      String     @unique
   ownerId   String
   shopperId String?
   isClosed  Boolean    @default(false)

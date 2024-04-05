@@ -67,7 +67,7 @@ const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
       </div>
       {items.length > 0 && (
         <div className="flex flex-col gap-2 justify-center items-center mt-10 w-full">
-          <span>Added items</span>
+          <span className="dark:text-white">Added items</span>
           {items.map((item) => (
             <ItemCardWithActions
               key={item.item.id}

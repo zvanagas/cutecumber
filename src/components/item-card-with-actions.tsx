@@ -51,7 +51,7 @@ const ItemCardWithActions = ({
                 </Button>
               )}
               <span
-                className={`flex items-center px-2 border-y ${
+                className={`flex items-center px-2 border-y dark:text-white ${
                   currAmount < 2 && 'border-l rounded-l-md'
                 }`}
               >

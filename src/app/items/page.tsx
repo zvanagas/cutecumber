@@ -13,7 +13,9 @@ export default function ItemsPage() {
   const [value, setValue] = useState('');
   const [categoryId, setCategoryId] = useState(1);
   const { data: categories } = trpc.categories.getAll.useQuery();
-  const { mutate: createItem } = trpc.items.create.useMutation();
+  const { mutate: createItem } = trpc.items.create.useMutation({
+    onSuccess: () => setValue(''),
+  });
   const { data: latestCart } = trpc.cart.getLatestId.useQuery();
   const debouncedValue = useDebounce(value);
   const { data } = trpc.items.getAll.useQuery(
@@ -27,7 +29,7 @@ export default function ItemsPage() {
     <div className="flex flex-col gap-4">
       <NavigationBar isBackButtonShown>
         <Button onClick={() => setIsCreationMode(!isCreationMode)}>
-          {isCreationMode ? 'Add to basket mode' : 'Creation mode'}
+          {isCreationMode ? 'Add' : 'Create'}
         </Button>
       </NavigationBar>
       {isCreationMode ? (
@@ -59,7 +61,7 @@ export default function ItemsPage() {
             ))}
           </select>
           <Button
-            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-300 disabled:bg-blue-200 disabled:cursor-not-allowed"
+            className="text-white duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
             onClick={() =>
               categoryId && createItem({ name: value, categoryId })
             }
