@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { publicProcedure } from '../trpc';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '../auth-options';
 
 export const cartRouter = {
   getSingle: publicProcedure
@@ -108,6 +108,7 @@ export const cartRouter = {
         },
         data: {
           isClosed: true,
+          closedAt: new Date(),
         },
       })
     ),
