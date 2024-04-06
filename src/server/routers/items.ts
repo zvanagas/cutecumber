@@ -14,6 +14,9 @@ export const itemsRouter = {
           name: { contains: input?.q ?? '', mode: 'insensitive' },
           categoryId: input?.categoryId,
         },
+        orderBy: {
+          name: 'asc',
+        },
         include: {
           category: true,
         },
@@ -24,6 +27,9 @@ export const itemsRouter = {
     .query(async ({ ctx, input }) =>
       ctx.prisma.item.findMany({
         where: { categoryId: input.categoryId },
+        orderBy: {
+          name: 'asc',
+        },
         include: {
           category: true,
         },
