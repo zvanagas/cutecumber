@@ -1,9 +1,9 @@
 'use client';
 import { trpc } from '@/client/trpc';
-import Button from '@/components/button';
-import Items from '@/components/items/items';
-import NavigationBar from '@/components/navigation-bar';
-import useDebounce from '@/hooks/use-debounce';
+import { Button } from '@/components/button';
+import { Items } from '@/components/items/items';
+import { NavigationBar } from '@/components/navigation-bar';
+import { useDebounce } from '@/hooks/use-debounce';
 import { CloseIcon } from '@/icons/close.icon';
 import { useState } from 'react';
 

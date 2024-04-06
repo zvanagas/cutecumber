@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import CloseButton from './close-button';
+import { CloseButton } from './close-button';
 
 type Props = {
   isOpen: boolean;
@@ -7,7 +7,7 @@ type Props = {
   onClose: () => void;
 };
 
-const Dialog = ({ isOpen, children, onClose }: Props) => (
+export const Dialog = ({ isOpen, children, onClose }: Props) => (
   <dialog open={isOpen}>
     <div
       className="bg-transparent top-0 left-0 backdrop-blur-lg fixed w-full h-full"
@@ -19,5 +19,3 @@ const Dialog = ({ isOpen, children, onClose }: Props) => (
     </div>
   </dialog>
 );
-
-export default Dialog;

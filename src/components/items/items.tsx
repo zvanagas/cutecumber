@@ -1,11 +1,11 @@
 'use client';
 import { trpc } from '@/client/trpc';
-import ItemCardWithActions from '@/components/item-card-with-actions';
+import { ItemCardWithActions } from '@/components/item-card-with-actions';
 import { ItemWithCategory } from '@/types/item';
-import Button from '../button';
+import { Button } from '../button';
 import { CartItem, SaveParams } from './interfaces/items';
 import { useState } from 'react';
-import Categories from '../categories';
+import { Categories } from '../categories';
 
 type Props = {
   itemsInCart?: CartItem[];
@@ -13,7 +13,7 @@ type Props = {
   onSave?: (items: SaveParams) => void;
 };
 
-const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
+export const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [categoryId, setCategoryId] = useState<number>();
   const { data: categories } = trpc.categories.getAll.useQuery();
@@ -87,5 +87,3 @@ const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
     </div>
   );
 };
-
-export default Items;

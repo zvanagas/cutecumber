@@ -16,7 +16,7 @@ export default function RootLayout({ children }: Props) {
           <head>
             <title>Cutecumber</title>
           </head>
-          <body className="[&:has(dialog[open])]:overflow-hidden dark:bg-slate-800">
+          <body className="[&:has(dialog[open])]:overflow-hidden dark:bg-slate-900">
             {children}
           </body>
         </html>

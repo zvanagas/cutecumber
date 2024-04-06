@@ -1,15 +1,15 @@
 import { ReactNode } from 'react';
-import BackButton from './back-button';
+import { BackButton } from './back-button';
 import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
-import Button from './button';
+import { Button } from './button';
 
 type Props = {
   children?: ReactNode;
   isBackButtonShown?: boolean;
 };
 
-const NavigationBar = ({ children, isBackButtonShown }: Props) => {
+export const NavigationBar = ({ children, isBackButtonShown }: Props) => {
   const router = useRouter();
   const { data, status } = useSession();
 
@@ -28,5 +28,3 @@ const NavigationBar = ({ children, isBackButtonShown }: Props) => {
     </div>
   );
 };
-
-export default NavigationBar;

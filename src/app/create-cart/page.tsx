@@ -1,7 +1,7 @@
 'use client';
 import { trpc } from '@/client/trpc';
-import Button from '@/components/button';
-import NavigationBar from '@/components/navigation-bar';
+import { Button } from '@/components/button';
+import { NavigationBar } from '@/components/navigation-bar';
 import { useState } from 'react';
 
 export default function CreateCartPage() {

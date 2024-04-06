@@ -1,10 +1,10 @@
 'use client';
 import { trpc } from '@/client/trpc';
-import BackButton from '@/components/back-button';
-import Button from '@/components/button';
-import Dialog from '@/components/dialog';
-import ItemCardWithActions from '@/components/item-card-with-actions';
-import Items from '@/components/items/items';
+import { BackButton } from '@/components/back-button';
+import { Button } from '@/components/button';
+import { Dialog } from '@/components/dialog';
+import { ItemCardWithActions } from '@/components/item-card-with-actions';
+import { Items } from '@/components/items/items';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

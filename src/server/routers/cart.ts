@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { publicProcedure } from '../trpc';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export const cartRouter = {
   getSingle: publicProcedure
@@ -49,7 +50,7 @@ export const cartRouter = {
   create: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ ctx: { prisma }, input: { name } }) => {
-      const session = await getServerSession();
+      const session = await getServerSession(authOptions);
 
       if (!session?.user.id) {
         return;
@@ -77,7 +78,7 @@ export const cartRouter = {
       })
     )
     .mutation(async ({ ctx: { prisma }, input: { cartId, items } }) => {
-      const session = await getServerSession();
+      const session = await getServerSession(authOptions);
 
       if (!session?.user.id) {
         return;

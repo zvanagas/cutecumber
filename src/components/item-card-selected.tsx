@@ -1,4 +1,4 @@
-import ItemCard from './item-card';
+import { ItemCard } from './item-card';
 import { CheckIcon } from '@/icons/check.icon';
 import { CartItemWithCategory } from '@/types/item';
 
@@ -7,7 +7,7 @@ type Props = {
   onToggle: () => void;
 };
 
-const ItemCardSelected = ({ item, onToggle }: Props) => (
+export const ItemCardSelected = ({ item, onToggle }: Props) => (
   <ItemCard
     item={item.item}
     amount={item.amount}
@@ -15,8 +15,8 @@ const ItemCardSelected = ({ item, onToggle }: Props) => (
       item.isPickedUp ? 'opacity-50' : undefined
     }`}
     onClick={onToggle}
-    renderContent={() => item.isPickedUp && <CheckIcon />}
+    renderContent={() =>
+      item.isPickedUp && <CheckIcon className="dark:text-white" />
+    }
   />
 );
-
-export default ItemCardSelected;

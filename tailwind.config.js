@@ -5,7 +5,8 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/icons/*.tsx',
-    './src/utils/*.ts'
+    './src/utils/*.ts',
+    './src/hooks/*.tsx',
   ],
   plugins: [],
 }

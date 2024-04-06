@@ -1,25 +1,21 @@
 'use client';
 import { trpc } from '@/client/trpc';
-import Button from '@/components/button';
-import Dialog from '@/components/dialog';
-import ItemCardSelected from '@/components/item-card-selected';
-import ItemCardWithActions from '@/components/item-card-with-actions';
-import Items from '@/components/items/items';
-import NavigationBar from '@/components/navigation-bar';
+import { Button } from '@/components/button';
+import { Dialog } from '@/components/dialog';
+import { ItemCardSelected } from '@/components/item-card-selected';
+import { ItemCardWithActions } from '@/components/item-card-with-actions';
+import { Items } from '@/components/items/items';
+import { NavigationBar } from '@/components/navigation-bar';
 import { useState } from 'react';
 
 export default function ActiveCartPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const { data } = trpc.cart.getLatest.useQuery();
+  const { data, isLoading } = trpc.cart.getLatest.useQuery();
   const { mutate: addToCart } = trpc.cart.add.useMutation();
   const { mutate: remove } = trpc.cart.removeSingle.useMutation();
   const { mutate: togglePickUp } = trpc.cart.togglePickUp.useMutation();
   const { mutate: updateAmount } = trpc.cart.updateAmount.useMutation();
-  const { mutate: closeActiveCart } = trpc.cart.close.useMutation();
-  const { mutate: saveToFridge } = trpc.fridge.save.useMutation({
-    onSuccess: () => data?.id && closeActiveCart({ cartId: data.id }),
-  });
 
   const handleMoveToFridge = () => {
     if (!data || data.items.length < 1) {
@@ -30,11 +26,17 @@ export default function ActiveCartPage() {
     saveToFridge({ items });
   };
 
+  const { mutate: closeActiveCart } = trpc.cart.close.useMutation({
+    onSuccess: handleMoveToFridge,
+  });
+  const { mutate: saveToFridge } = trpc.fridge.save.useMutation();
+
   const renderSelectableCart = () => (
     <>
-      <h1 className="text-black dark:text-white text-xl">Basket</h1>
+      <h1 className="text-black dark:text-white text-xl">{data?.name}</h1>
       <div className="flex flex-col w-full gap-2 mt-4 p-2">
-        {!data?.items.length && (
+        {isLoading && <span className="dark:text-white">Loading...</span>}
+        {!isLoading && !data?.items.length && (
           <span className="dark:text-white">No items in basket...</span>
         )}
         {data?.items.map((item) => (
@@ -55,7 +57,11 @@ export default function ActiveCartPage() {
       {data &&
         data.items.length > 0 &&
         data.items.every((item) => item.isPickedUp) && (
-          <Button onClick={handleMoveToFridge}>Move to fridge</Button>
+          <Button
+            onClick={() => data?.id && closeActiveCart({ cartId: data.id })}
+          >
+            Done shopping
+          </Button>
         )}
     </>
   );

@@ -8,7 +8,7 @@ type Props = {
   isDisabled?: boolean;
 };
 
-const Card = ({ link, label, Icon, isDisabled }: Props) => {
+export const Card = ({ link, label, Icon, isDisabled }: Props) => {
   const router = useRouter();
 
   return (
@@ -23,5 +23,3 @@ const Card = ({ link, label, Icon, isDisabled }: Props) => {
     </div>
   );
 };
-
-export default Card;

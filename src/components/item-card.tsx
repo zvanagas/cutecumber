@@ -12,7 +12,7 @@ type Props = {
   renderContent?: () => ReactNode;
 };
 
-const ItemCard = ({
+export const ItemCard = ({
   item,
   amount,
   className,
@@ -22,7 +22,7 @@ const ItemCard = ({
 }: Props) => {
   const getClassNames = () => {
     let baseClasses =
-      'shadow-sm p-2 flex w-full justify-between rounded border border-slate-300 relative';
+      'shadow-sm p-2 flex w-full justify-between rounded border-slate-300 relative dark:bg-slate-800';
 
     if (isDisabled) {
       baseClasses += ' cursor-not-allowed';
@@ -50,5 +50,3 @@ const ItemCard = ({
     </div>
   );
 };
-
-export default ItemCard;

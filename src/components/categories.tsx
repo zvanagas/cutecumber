@@ -6,7 +6,11 @@ type Props = {
   categoryId?: number;
 };
 
-const Categories = ({ categories, categoryId, onCategoryClick }: Props) => (
+export const Categories = ({
+  categories,
+  categoryId,
+  onCategoryClick,
+}: Props) => (
   <div className="flex justify-center gap-2 flex-wrap">
     <label className="cursor-pointer">
       <input
@@ -37,5 +41,3 @@ const Categories = ({ categories, categoryId, onCategoryClick }: Props) => (
     ))}
   </div>
 );
-
-export default Categories;

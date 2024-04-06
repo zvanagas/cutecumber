@@ -1,8 +1,8 @@
-import ItemCard from './item-card';
+import { ItemCard } from './item-card';
 import { useEffect, useState } from 'react';
 import { ItemWithCategory } from '@/types/item';
-import CloseButton from './close-button';
-import Button from './button';
+import { Button } from './button';
+import { CloseIcon } from '@/icons/close.icon';
 
 type Props = {
   item: ItemWithCategory;
@@ -12,7 +12,7 @@ type Props = {
   onDelete?: () => void;
 };
 
-const ItemCardWithActions = ({
+export const ItemCardWithActions = ({
   item,
   amount,
   isDisabled,
@@ -29,13 +29,20 @@ const ItemCardWithActions = ({
 
   const renderContent = () => (
     <div className="flex flex-col justify-between items-end gap-6">
-      {onDelete && <CloseButton onClick={onDelete} />}
+      {onDelete && (
+        <button
+          className="text-white border rounded-md dark:border-white/20 p-2 shadow-sm shadow-white"
+          onClick={onDelete}
+        >
+          <CloseIcon className="w-5 h-5 text-white" />
+        </button>
+      )}
       {onUpdate && (
         <>
           <div className="flex text-xl gap-2">
             {amount !== currAmount && (
               <Button
-                className="rounded-md"
+                className="dark:border-white/20 px-3"
                 onClick={() => onUpdate(currAmount)}
               >
                 U
@@ -44,21 +51,17 @@ const ItemCardWithActions = ({
             <div className="flex">
               {currAmount > 1 && (
                 <Button
-                  className="rounded-l-md bg-yellow-300"
+                  className="px-3.5 dark:border-white/20"
                   onClick={() => setCurrAmount(currAmount - 1)}
                 >
                   -
                 </Button>
               )}
-              <span
-                className={`flex items-center px-2 border-y dark:text-white ${
-                  currAmount < 2 && 'border-l rounded-l-md'
-                }`}
-              >
+              <span className="flex items-center px-3 dark:text-white">
                 {currAmount}
               </span>
               <Button
-                className="px-2 rounded-r-md bg-lime-300"
+                className="px-3 border-white/20 shadow-none"
                 onClick={() => setCurrAmount(currAmount + 1)}
               >
                 +
@@ -81,5 +84,3 @@ const ItemCardWithActions = ({
     </div>
   );
 };
-
-export default ItemCardWithActions;
