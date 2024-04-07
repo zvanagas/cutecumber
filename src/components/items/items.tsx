@@ -17,10 +17,19 @@ export const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [categoryId, setCategoryId] = useState<number>();
   const { data: categories } = trpc.categories.getAll.useQuery();
-  const { data, isFetching, isFetched } = trpc.items.getAll.useQuery({
+  const { data, isLoading } = trpc.items.getAll.useQuery({
     q: '',
     categoryId,
   });
+  const itemIds = items.reduce<Record<number, boolean>>((prev, curr) => {
+    if (curr.item.id) {
+      prev[curr.item.id] = true;
+    }
+
+    return prev;
+  }, {});
+
+  const filteredItems = data?.filter(({ id }) => !itemIds[id]) ?? [];
 
   const addToBasket = (item: ItemWithCategory, amount: number) => {
     setItems([...items, { item, amount }]);
@@ -49,16 +58,18 @@ export const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
         onCategoryClick={setCategoryId}
       />
       <div className="flex flex-col items-center w-full gap-2">
-        {isFetching && <div className="dark:text-white">Loading...</div>}
-        {!isFetching && isFetched && !data?.length && (
+        {isLoading && <div className="dark:text-white">Loading...</div>}
+        {!isLoading && !filteredItems.length && (
           <div className="dark:text-white">No items...</div>
         )}
-        {!isFetching &&
-          data?.map((item) => (
+        {!isLoading &&
+          filteredItems?.map((item) => (
             <ItemCardWithActions
               key={item.name}
               item={item}
-              isDisabled={itemsInCart?.some((it) => it.item.id === item.id)}
+              isDisabled={itemsInCart?.some(
+                (itemInCart) => itemInCart.item.id === item.id
+              )}
               onUpdate={
                 isBasketMode ? (amount) => addToBasket(item, amount) : undefined
               }
@@ -66,7 +77,7 @@ export const Items = ({ itemsInCart, isBasketMode, onSave }: Props) => {
           ))}
       </div>
       {items.length > 0 && (
-        <div className="flex flex-col gap-2 justify-center items-center mt-10 w-full">
+        <div className="flex flex-col gap-2 justify-center items-center w-full">
           <span className="dark:text-white">Added items</span>
           {items.map((item) => (
             <ItemCardWithActions

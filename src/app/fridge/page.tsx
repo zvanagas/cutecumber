@@ -16,8 +16,9 @@ export default function FridgePage() {
   const [isOpen, setIsOpen] = useState(false);
   const items = useMemo(
     () =>
-      data?.filter((it) => it.item.name.toLowerCase().includes(searchValue)) ??
-      [],
+      data?.filter(({ item }) =>
+        item.name.toLowerCase().includes(searchValue)
+      ) ?? [],
     [data, searchValue]
   );
 

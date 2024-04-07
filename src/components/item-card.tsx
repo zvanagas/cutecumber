@@ -1,7 +1,6 @@
 import { ItemWithCategory } from '@/types/item';
-import { getBgColorClassName } from '@/utils/color.utils';
-import { getFirstLetter } from '@/utils/string.utils';
 import { ReactNode } from 'react';
+import { CategoryBlock } from './category-block';
 
 type Props = {
   item: ItemWithCategory;
@@ -34,13 +33,7 @@ export const ItemCard = ({
   return (
     <div className={getClassNames()} onClick={() => !isDisabled && onClick?.()}>
       <div className="flex gap-2">
-        <div
-          className={`flex self-center items-center rounded py-2 px-4 border border-slate-500 ${getBgColorClassName(
-            item.category.name
-          )}`}
-        >
-          {getFirstLetter(item.category.name)}
-        </div>
+        <CategoryBlock name={item.category.name} />
         <div className="flex flex-col justify-center dark:text-white">
           <span>{item.name}</span>
           {!!amount && <span>Amount: {amount}</span>}

@@ -16,7 +16,7 @@ export const NavigationBar = ({ children, isBackButtonShown }: Props) => {
   return (
     <div className="flex justify-between bg-white dark:bg-slate-800 shadow-sm dark:shadow-white p-2 rounded w-full">
       <div className="flex gap-2">
-        {isBackButtonShown && <BackButton onClick={() => router.push('/')} />}
+        {isBackButtonShown && <BackButton onClick={() => router.back()} />}
         {children}
       </div>
       {status === 'authenticated' && (

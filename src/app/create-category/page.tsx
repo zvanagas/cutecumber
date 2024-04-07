@@ -25,7 +25,12 @@ export default function CreateCategoryPage() {
         value={name}
         onChange={({ target }) => setName(target.value)}
       />
-      <Button onClick={() => mutate({ name })}>Create</Button>
+      <Button
+        isDisabled={data?.some((category) => category.name === name)}
+        onClick={() => mutate({ name })}
+      >
+        Create
+      </Button>
     </div>
   );
 }

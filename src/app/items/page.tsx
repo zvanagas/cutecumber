@@ -1,29 +1,29 @@
 'use client';
 import { trpc } from '@/client/trpc';
 import { Button } from '@/components/button';
-import { Items } from '@/components/items/items';
+import { CategoryBlock } from '@/components/category-block';
 import { NavigationBar } from '@/components/navigation-bar';
 import { useDebounce } from '@/hooks/use-debounce';
 import { CloseIcon } from '@/icons/close.icon';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function ItemsPage() {
   const [isCreationMode, setIsCreationMode] = useState(false);
-  const { mutate: addToCart } = trpc.cart.add.useMutation();
   const [value, setValue] = useState('');
   const [categoryId, setCategoryId] = useState(1);
   const { data: categories } = trpc.categories.getAll.useQuery();
   const { mutate: createItem } = trpc.items.create.useMutation({
     onSuccess: () => setValue(''),
   });
-  const { data: latestCart } = trpc.cart.getLatestId.useQuery();
   const debouncedValue = useDebounce(value);
   const { data } = trpc.items.getAll.useQuery(
     {
       q: debouncedValue,
     },
-    { enabled: value.length > 0 }
+    { enabled: !isCreationMode || value.length > 0 }
   );
+  const router = useRouter();
 
   return (
     <div className="flex flex-col gap-4">
@@ -71,12 +71,18 @@ export default function ItemsPage() {
           </Button>
         </div>
       ) : (
-        <Items
-          isBasketMode
-          onSave={({ items }) =>
-            latestCart && addToCart({ cartId: latestCart.id, items })
-          }
-        />
+        <div className="flex flex-wrap gap-2 w-full items-center justify-center p-2 dark:bg-slate-800 shadow-sm dark:shadow-white rounded">
+          {data?.map(({ id, name, category }) => (
+            <button
+              key={id}
+              className="flex flex-col items-center border dark:border-white p-3 rounded"
+              onClick={() => router.push(`/items/${id}`)}
+            >
+              <CategoryBlock name={category.name} />
+              <span className="dark:text-white">{name}</span>
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

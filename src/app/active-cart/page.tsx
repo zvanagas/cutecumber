@@ -35,9 +35,13 @@ export default function ActiveCartPage() {
     <>
       <h1 className="text-black dark:text-white text-xl">{data?.name}</h1>
       <div className="flex flex-col w-full gap-2 mt-4 p-2">
-        {isLoading && <span className="dark:text-white">Loading...</span>}
+        {isLoading && (
+          <span className="dark:text-white text-center">Loading...</span>
+        )}
         {!isLoading && !data?.items.length && (
-          <span className="dark:text-white">No items in basket...</span>
+          <span className="dark:text-white text-center">
+            No items in basket...
+          </span>
         )}
         {data?.items.map((item) => (
           <div key={item.item.name} className="relative">

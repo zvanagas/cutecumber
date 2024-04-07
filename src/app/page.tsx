@@ -9,7 +9,7 @@ import { MilkIcon } from '@/icons/milk.icon';
 import { SaladIcon } from '@/icons/salad.icon';
 
 export default function Home() {
-  const { data } = trpc.cart.getLatest.useQuery();
+  const { data, isLoading } = trpc.cart.getLatest.useQuery();
 
   return (
     <>
@@ -19,7 +19,13 @@ export default function Home() {
         {!!data && (
           <Card link="/active-cart" label="Active cart" Icon={BasketIcon} />
         )}
-        <Card link="/create-cart" label="Create cart" Icon={EmptyBasketIcon} />
+        {!data && !isLoading && (
+          <Card
+            link="/create-cart"
+            label="Create cart"
+            Icon={EmptyBasketIcon}
+          />
+        )}
         <Card link="/create-category" label="Create category" Icon={BowlIcon} />
         <Card link="/items" label="Manage items" Icon={SaladIcon} />
       </div>
