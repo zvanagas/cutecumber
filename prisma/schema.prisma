@@ -56,6 +56,10 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model WhitelistedEmails {
+  email String @unique
+}
+
 model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique

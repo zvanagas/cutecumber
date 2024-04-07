@@ -14,6 +14,19 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user }) {
+      if (!user.email) {
+        return false;
+      }
+
+      const email = await client.whitelistedEmails.findFirst({
+        where: {
+          email: user.email,
+        },
+      });
+
+      return !!email;
+    },
     session({ session, token }) {
       if (session.user && token.sub) {
         session.user.id = token.sub;

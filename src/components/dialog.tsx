@@ -15,7 +15,7 @@ export const Dialog = ({ isOpen, children, onClose }: Props) => (
     />
     <div className="bg-white dark:bg-slate-800 border rounded w-11/12 h-5/6 p-2 fixed inset-0 m-auto overflow-auto">
       <CloseIcon
-        className="absolute right-2 w-6 text-black cursor-pointer text-white"
+        className="absolute right-2 w-6 text-black cursor-pointer dark:text-white"
         onClick={onClose}
       />
       {children}
