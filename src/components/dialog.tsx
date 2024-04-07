@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { CloseButton } from './close-button';
+import { CloseIcon } from '@/icons/close.icon';
 
 type Props = {
   isOpen: boolean;
@@ -14,7 +14,10 @@ export const Dialog = ({ isOpen, children, onClose }: Props) => (
       onClick={onClose}
     />
     <div className="bg-white dark:bg-slate-800 border rounded w-11/12 h-5/6 p-2 fixed inset-0 m-auto overflow-auto">
-      <CloseButton className="absolute right-2" onClick={onClose} />
+      <CloseIcon
+        className="absolute right-2 w-6 text-black cursor-pointer text-white"
+        onClick={onClose}
+      />
       {children}
     </div>
   </dialog>
