@@ -2,10 +2,10 @@
 import { trpc } from '@/client/trpc';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { ItemCardWithActions } from '@/components/item-card-with-actions';
+import { ItemCardCollapse } from '@/components/item-card-collapse';
 import { Items } from '@/components/items/items';
 import { NavigationBar } from '@/components/navigation-bar';
-import { Fragment, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export default function FridgePage() {
   const { data, isLoading } = trpc.fridge.getAll.useQuery();
@@ -45,21 +45,19 @@ export default function FridgePage() {
             {!isLoading && items.length < 1 && (
               <span className="dark:text-white">No items in the fridge...</span>
             )}
-            {items.map(({ item, amount }, index) => (
-              <Fragment key={item.id}>
-                <ItemCardWithActions
+            <div className="flex gap-2">
+              {items.map(({ item, amount }) => (
+                <ItemCardCollapse
+                  key={item.id}
                   item={item}
                   amount={amount}
-                  onUpdate={(newAmount) =>
+                  onSave={(newAmount) =>
                     update({ id: item.id, amount: newAmount })
                   }
                   onDelete={() => deleteItem({ id: item.id })}
                 />
-                {items.length - 1 > index && (
-                  <div className="w-60 h-0.5 bg-white opacity-10 rounded" />
-                )}
-              </Fragment>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

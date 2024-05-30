@@ -21,7 +21,7 @@ export const ItemCard = ({
 }: Props) => {
   const getClassNames = () => {
     let baseClasses =
-      'shadow-sm p-2 flex w-full justify-between rounded border-slate-300 relative dark:bg-slate-800';
+      'shadow-sm px-4 py-2 flex flex-col gap-2 w-28 justify-between self-start rounded border border-slate-300 relative dark:bg-slate-800';
 
     if (isDisabled) {
       baseClasses += ' cursor-not-allowed';
@@ -31,8 +31,11 @@ export const ItemCard = ({
   };
 
   return (
-    <div className={getClassNames()} onClick={() => !isDisabled && onClick?.()}>
-      <div className="flex gap-2">
+    <div className={getClassNames()}>
+      <div
+        className="flex flex-col items-center gap-2"
+        onClick={() => !isDisabled && onClick?.()}
+      >
         <CategoryBlock name={item.category.name} />
         <div className="flex flex-col justify-center dark:text-white">
           <span>{item.name}</span>

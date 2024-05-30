@@ -3,7 +3,7 @@ import { trpc } from '@/client/trpc';
 import { BackButton } from '@/components/back-button';
 import { Button } from '@/components/button';
 import { Dialog } from '@/components/dialog';
-import { ItemCardWithActions } from '@/components/item-card-with-actions';
+import { ItemCardCollapse } from '@/components/item-card-collapse';
 import { Items } from '@/components/items/items';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -33,11 +33,11 @@ export default function CartPage({ params }: Props) {
         <h1 className="text-black text-xl">Edit active cart</h1>
         <div className="w-full p-2 flex flex-col items-center gap-2">
           {data?.items.map((item) => (
-            <ItemCardWithActions
+            <ItemCardCollapse
               key={item.id}
               item={item.item}
               amount={item.amount}
-              onUpdate={(amount) =>
+              onSave={(amount) =>
                 updateAmount({ cartId, itemId: item.itemId, amount })
               }
               onDelete={() => remove({ cartId, itemId: item.itemId })}

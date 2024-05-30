@@ -1,21 +1,25 @@
 'use client';
 import { trpc } from '@/client/trpc';
 import { Button } from '@/components/button';
-import { Dialog } from '@/components/dialog';
+import { ItemCardCollapse } from '@/components/item-card-collapse';
 import { ItemCardSelected } from '@/components/item-card-selected';
-import { ItemCardWithActions } from '@/components/item-card-with-actions';
 import { Items } from '@/components/items/items';
 import { NavigationBar } from '@/components/navigation-bar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ActiveCartPage() {
-  const [isOpen, setIsOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const { data, isLoading } = trpc.cart.getLatest.useQuery();
   const { mutate: addToCart } = trpc.cart.add.useMutation();
   const { mutate: remove } = trpc.cart.removeSingle.useMutation();
   const { mutate: togglePickUp } = trpc.cart.togglePickUp.useMutation();
   const { mutate: updateAmount } = trpc.cart.updateAmount.useMutation();
+
+  useEffect(() => {
+    if (!isEditMode && !isLoading && !data?.items.length) {
+      setIsEditMode(true);
+    }
+  }, [data?.items.length, isEditMode, isLoading]);
 
   const handleMoveToFridge = () => {
     if (!data || data.items.length < 1) {
@@ -74,36 +78,37 @@ export default function ActiveCartPage() {
     <>
       <h1 className="text-black dark:text-white text-xl">Edit active cart</h1>
       <div className="w-full p-2 flex flex-col items-center gap-2">
-        {data?.items.map((item) => (
-          <ItemCardWithActions
-            key={item.id}
-            item={item.item}
-            amount={item.amount}
-            onUpdate={(amount) =>
-              updateAmount({ cartId: item.cartId, itemId: item.itemId, amount })
-            }
-            onDelete={() =>
-              remove({ cartId: item.cartId, itemId: item.itemId })
-            }
-          />
-        ))}
-        <Button onClick={() => setIsOpen(true)}>Add to cart</Button>
+        <div className="flex gap-2">
+          {data?.items.map((item) => (
+            <ItemCardCollapse
+              key={item.id}
+              item={item.item}
+              amount={item.amount}
+              onSave={(id, amount) =>
+                updateAmount({
+                  cartId: item.cartId,
+                  itemId: id,
+                  amount,
+                })
+              }
+              onDelete={() =>
+                remove({ cartId: item.cartId, itemId: item.itemId })
+              }
+            />
+          ))}
+        </div>
       </div>
+      <Items
+        isBasketMode
+        itemsInCart={data?.items}
+        onSave={({ items }) => {
+          if (!data?.id) {
+            return;
+          }
 
-      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <Items
-          isBasketMode
-          itemsInCart={data?.items}
-          onSave={({ items }) => {
-            if (!data?.id) {
-              return;
-            }
-
-            addToCart({ cartId: data?.id, items });
-            setIsOpen(false);
-          }}
-        />
-      </Dialog>
+          addToCart({ cartId: data?.id, items });
+        }}
+      />
     </>
   );
 
