@@ -38,7 +38,7 @@ export default function ActiveCartPage() {
   const renderSelectableCart = () => (
     <>
       <h1 className="text-black dark:text-white text-xl">{data?.name}</h1>
-      <div className="flex justify-center w-full gap-2 mt-4 p-2">
+      <div className="flex justify-center flex-wrap w-full gap-2 mt-4 p-2">
         {isLoading && (
           <span className="dark:text-white text-center">Loading...</span>
         )}
